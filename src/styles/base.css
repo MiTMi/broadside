@@ -1,0 +1,299 @@
+/*
+ * Fonts: latin subset, only the weights the design uses, woff2 only. The files
+ * come from the @fontsource packages and are inlined as data URIs by the
+ * single-file build — the game must never reference a network URL.
+ */
+@font-face {
+  font-family: 'Big Shoulders Stencil Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@fontsource/big-shoulders-stencil-display/files/big-shoulders-stencil-display-latin-700-normal.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Big Shoulders Stencil Display';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('@fontsource/big-shoulders-stencil-display/files/big-shoulders-stencil-display-latin-800-normal.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow Semi Condensed';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@fontsource/barlow-semi-condensed/files/barlow-semi-condensed-latin-400-normal.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow Semi Condensed';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('@fontsource/barlow-semi-condensed/files/barlow-semi-condensed-latin-500-normal.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow Semi Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('@fontsource/barlow-semi-condensed/files/barlow-semi-condensed-latin-600-normal.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'B612 Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@fontsource/b612-mono/files/b612-mono-latin-400-normal.woff2') format('woff2');
+}
+
+/* Reset-ish base, typography and the shared controls. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* The table: the illustrated tabletop, fixed and covering, under a --mist veil
+   that keeps every scrap of text on it legible (PLAN P10). --mist alone is the
+   fallback, so the page looks right before the image lands (and without it). */
+body {
+  margin: 0;
+  background-color: var(--mist);
+  background-image: linear-gradient(var(--mist-veil), var(--mist-veil)), var(--table-image);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--t-16);
+  font-weight: 400;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure,
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+fieldset {
+  border: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+::selection {
+  background: var(--signal);
+  color: var(--ink);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Headings ------------------------------------------------------------- */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: var(--t-20);
+  line-height: 1.1;
+}
+
+.eyebrow {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--t-12);
+  color: var(--ink-faint);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--t-12);
+}
+
+/* Panels --------------------------------------------------------------- */
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+  padding: var(--s-4);
+}
+
+/* Buttons -------------------------------------------------------------- */
+
+.btn {
+  --btn-bg: var(--surface);
+  --btn-fg: var(--ink);
+  --btn-edge: var(--edge);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 40px;
+  padding: 0 var(--s-4);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid var(--btn-edge);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: var(--t-16);
+  cursor: pointer;
+  transition: background-color 120ms linear, border-color 120ms linear;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--surface-sunken);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  --btn-bg: var(--signal);
+  --btn-edge: var(--signal);
+  --btn-fg: var(--ink);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--signal);
+  filter: brightness(0.95);
+}
+
+.btn--quiet {
+  --btn-bg: transparent;
+  --btn-edge: transparent;
+  color: var(--ink-soft);
+}
+
+.btn--icon {
+  min-width: 40px;
+  padding: 0 var(--s-2);
+}
+
+/* Segmented control (difficulty) --------------------------------------- */
+
+.segmented {
+  display: flex;
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.segmented__option {
+  flex: 1 1 0;
+  position: relative;
+  display: flex;
+}
+
+.segmented__input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.segmented__label {
+  flex: 1 1 auto;
+  padding: var(--s-2) var(--s-1);
+  text-align: center;
+  font-weight: 600;
+  font-size: var(--t-14);
+  color: var(--ink-soft);
+  border-left: 1px solid var(--edge);
+  cursor: pointer;
+}
+
+.segmented__option:first-child .segmented__label {
+  border-left: 0;
+}
+
+.segmented__input:checked + .segmented__label {
+  background: var(--signal);
+  color: var(--ink);
+}
+
+.segmented__input:focus-visible + .segmented__label {
+  outline: 2px solid var(--signal);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,77 @@
+/*
+ * The design tokens for "the tabletop pegboard" (PLAN → Design direction).
+ * This is the ONLY file allowed to contain colour literals; everything else
+ * derives from these custom properties.
+ */
+:root {
+  color-scheme: light;
+
+  /* Palette */
+  --mist: #e4ebf1; /* the table */
+  --ink: #0e2238; /* text, wordmark */
+  --tray: #174a7c; /* board tray body */
+  --tray-deep: #0f3358; /* peg wells, tray shadow side */
+  /* The ships are illustrations now, so there is no hull colour here any more:
+     the sprites were generated against this same palette (DECISIONS D5). */
+  --peg-red: #e0362c; /* hits, defeat */
+  --peg-white: #f6f4ee; /* misses */
+  --signal: #f5b82e; /* the one accent */
+
+  /* Derived surfaces and lines */
+  --surface: #f6f9fb;
+  --surface-sunken: #dde6ee;
+  /* Both text greys clear 4.5:1 on --surface and on --mist. */
+  --ink-soft: #3c4c5c;
+  --ink-faint: #56646f;
+  --edge: #c7d5e1;
+  --tray-label: var(--mist);
+
+  /* Elevation: one soft drop shadow and the tray bevel — no other depth */
+  --shadow-panel: 0 1px 2px rgba(14, 34, 56, 0.06), 0 8px 20px rgba(14, 34, 56, 0.07);
+  --shadow-tray: 0 2px 0 rgba(0, 0, 0, 0.18), 0 10px 24px rgba(14, 34, 56, 0.16);
+  --tray-lip-light: rgba(255, 255, 255, 0.16);
+  --tray-lip-dark: rgba(0, 0, 0, 0.22);
+  --peg-shadow: rgba(8, 20, 34, 0.42);
+  --well-inner: rgba(0, 0, 0, 0.25);
+  --scrim: rgba(14, 34, 56, 0.58);
+  /* The table art is bright cartoon (P8): this veil flattens its contrast so
+     the UI on top of it keeps its 4.5:1, and --mist stays the fallback. */
+  --mist-veil: rgba(228, 235, 241, 0.52);
+  /* Set from ui/assets.ts at boot; until then the page is plain --mist. */
+  --table-image: none;
+  --clear-dot: rgba(228, 235, 241, 0.34);
+  --peg-notch: rgba(246, 244, 238, 0.8);
+
+  /* Placement feedback (Decision 8b) */
+  --preview-valid: rgba(246, 244, 238, 0.55);
+  --preview-invalid: rgba(224, 54, 44, 0.45);
+  --forbidden-tint: rgba(224, 54, 44, 0.12);
+  --forbidden-well: #3f2f4a;
+
+  /* Type */
+  --font-display: 'Big Shoulders Stencil Display', Impact, sans-serif;
+  --font-ui: 'Barlow Semi Condensed', system-ui, sans-serif;
+  --font-mono: 'B612 Mono', ui-monospace, monospace;
+  --t-12: 12px;
+  --t-14: 14px;
+  --t-16: 16px;
+  --t-20: 20px;
+  --t-28: 28px;
+  --t-44: 44px;
+  --t-72: 72px;
+
+  /* Space and shape */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-pill: 999px;
+
+  /* Motion — the peg drop is the one bold move */
+  --drop-duration: 280ms;
+  --drop-ease: cubic-bezier(0.2, 1.4, 0.4, 1);
+}

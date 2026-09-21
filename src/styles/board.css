@@ -1,0 +1,372 @@
+/*
+ * The board: a moulded plastic tray of 12 x 12 peg wells, with the ship
+ * sprites in a layer over the wells and the pegs dropping in on top of them.
+ *
+ * STACKING INVARIANT (PLAN P9) — all four layers live in the ONE stacking
+ * context created by `.board__grid`:
+ *     1 wells / ripple / forbidden tint · 2 ship sprites · 3 pegs · 4 focus ring
+ * so neither `.board__row` nor `.cell` may ever create a stacking context of
+ * its own (no z-index, transform, filter, opacity < 1, isolation) — that would
+ * trap the pegs underneath the sprites.
+ */
+
+.board {
+  --gutter: clamp(14px, 1.6vw + 8px, 22px);
+  /* ~6% of a cell (cells run ~25px to ~45px): the inset that absorbs the
+     sprites' aspect slack without letting them touch the next ship. */
+  --hull-inset: clamp(1.5px, 0.2vw + 0.8px, 3px);
+  width: 100%;
+  max-width: var(--board-max, 600px);
+  margin: 0 auto;
+  padding: var(--s-2);
+  background: var(--tray);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-tray), inset 0 1px 0 var(--tray-lip-light),
+    inset 0 -2px 0 var(--tray-lip-dark);
+}
+
+.board--sm {
+  --board-max: 320px;
+  --gutter: clamp(13px, 1vw + 8px, 18px);
+  padding: var(--s-1);
+}
+
+.board__grid {
+  position: relative;
+  z-index: 0; /* the one stacking context — see the invariant above */
+  display: flex;
+  flex-direction: column;
+}
+
+.board__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--gutter) repeat(12, minmax(0, 1fr));
+}
+
+.board__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 0.55vw + 6px, 11px);
+  line-height: 1;
+  color: var(--tray-label);
+  opacity: 0.8;
+  user-select: none;
+}
+
+.board__row--head .board__label {
+  height: var(--gutter);
+}
+
+/* Cells ----------------------------------------------------------------- */
+
+.cell {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.cell__well {
+  position: absolute;
+  z-index: 1;
+  inset: 14%;
+  border-radius: 50%;
+  background: var(--tray-deep);
+  box-shadow: inset 0 1px 1px var(--well-inner);
+}
+
+.cell[data-state='clear'] .cell__well::after {
+  content: '';
+  position: absolute;
+  inset: 36%;
+  border-radius: 50%;
+  background: var(--clear-dot);
+}
+
+.cell__peg {
+  display: none;
+  position: absolute;
+  z-index: 3; /* pegs always sit on top of the ship sprites */
+  inset: 17%;
+  border-radius: 50%;
+}
+
+.cell[data-state='miss'] .cell__peg,
+.cell[data-state='hit'] .cell__peg,
+.cell[data-state='sunk'] .cell__peg {
+  display: block;
+}
+
+.cell[data-state='miss'] .cell__peg {
+  background: var(--peg-white);
+}
+
+.cell[data-state='hit'] .cell__peg,
+.cell[data-state='sunk'] .cell__peg {
+  background: var(--peg-red);
+}
+
+/* The cross notch makes a hit readable without colour. */
+.cell[data-state='hit'] .cell__peg::before,
+.cell[data-state='sunk'] .cell__peg::before,
+.cell[data-state='hit'] .cell__peg::after,
+.cell[data-state='sunk'] .cell__peg::after {
+  content: '';
+  position: absolute;
+  background: var(--peg-notch);
+  border-radius: 1px;
+}
+
+.cell[data-state='hit'] .cell__peg::before,
+.cell[data-state='sunk'] .cell__peg::before {
+  left: 24%;
+  right: 24%;
+  top: calc(50% - 1px);
+  height: 2px;
+}
+
+.cell[data-state='hit'] .cell__peg::after,
+.cell[data-state='sunk'] .cell__peg::after {
+  top: 24%;
+  bottom: 24%;
+  left: calc(50% - 1px);
+  width: 2px;
+}
+
+.cell__ripple {
+  position: absolute;
+  z-index: 1;
+  inset: 14%;
+  border-radius: 50%;
+  border: 2px solid var(--peg-white);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Forbidden halo while a ship is selected (Decision 8b) */
+.cell[data-forbidden='true'] .cell__well {
+  background: var(--forbidden-well);
+}
+
+.cell[data-forbidden='true']::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: var(--forbidden-tint);
+  pointer-events: none;
+}
+
+/* Targeting reticle: the one accent colour, on fireable cells only. */
+.cell[data-fireable='true'] {
+  cursor: crosshair;
+}
+
+.cell[data-fireable='true']:hover .cell__well,
+.cell[data-fireable='true']:focus-visible .cell__well {
+  box-shadow: 0 0 0 2px var(--signal), inset 0 1px 1px var(--well-inner);
+}
+
+.cell[data-placeable='true'] {
+  cursor: pointer;
+}
+
+/* Drawn as a child so the ring clears the sprites (stacking invariant). */
+.cell:focus-visible {
+  outline: none;
+}
+
+.cell:focus-visible::before {
+  content: '';
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 2px var(--signal);
+  pointer-events: none;
+}
+
+/* Ship layer ------------------------------------------------------------ */
+
+.board__ships {
+  position: absolute;
+  z-index: 2;
+  top: var(--gutter);
+  left: var(--gutter);
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(12, minmax(0, 1fr));
+  overflow: clip; /* belt and braces: a rotated sprite can never spill */
+  pointer-events: none;
+}
+
+/* The hull box is exactly the ship's cell span; the sprite is inset inside it. */
+.hull {
+  position: relative;
+}
+
+/*
+ * Horizontal: stretch the bow-right sprite over the span (`fill`, so the
+ * trimmed art's aspect slack is absorbed — PLAN, Asset table).
+ * Vertical: the SAME file, sized to the span it would occupy horizontally
+ * (--len columns wide, one row tall) and then rotated a quarter turn so the
+ * bow points up. Sizing before rotating is what keeps it inside its cells.
+ */
+.hull__img {
+  position: absolute;
+  display: block;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.hull--h > .hull__img {
+  left: var(--hull-inset);
+  top: var(--hull-inset);
+  width: calc(100% - 2 * var(--hull-inset));
+  height: calc(100% - 2 * var(--hull-inset));
+}
+
+.hull--v > .hull__img {
+  left: 50%;
+  top: 50%;
+  width: calc(var(--len, 1) * 100% - 2 * var(--hull-inset));
+  height: calc(100% / var(--len, 1) - 2 * var(--hull-inset));
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.hull--ghost {
+  opacity: 0.42;
+  animation: hull-reveal 320ms ease-out;
+}
+
+.hull--sunk {
+  animation: hull-reveal 320ms ease-out;
+}
+
+/* Placement preview: a semi-transparent sprite over its footprint. */
+.hull--valid,
+.hull--invalid {
+  background: var(--preview-valid);
+  border-radius: var(--radius-pill);
+}
+
+.hull--invalid {
+  background: var(--preview-invalid);
+}
+
+.hull--valid > .hull__img {
+  opacity: 0.6;
+}
+
+.hull--invalid > .hull__img {
+  opacity: 0.5;
+}
+
+/* The peg drop ---------------------------------------------------------- */
+
+@keyframes peg-drop {
+  0% {
+    transform: scale(1.7);
+    box-shadow: 0 6px 8px var(--peg-shadow);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 transparent;
+  }
+}
+
+@keyframes peg-pulse {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.22);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes well-flash {
+  0%,
+  35% {
+    background: var(--peg-red);
+  }
+  100% {
+    background: var(--tray-deep);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 0.65;
+    transform: scale(0.55);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.3);
+  }
+}
+
+@keyframes hull-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cell--drop .cell__peg {
+  animation: peg-drop var(--drop-duration) var(--drop-ease) both;
+}
+
+.cell--drop[data-state='hit'] .cell__well,
+.cell--drop[data-state='sunk'] .cell__well {
+  animation: well-flash 340ms ease-out;
+}
+
+.cell--drop[data-state='miss'] .cell__ripple {
+  animation: ripple 520ms ease-out;
+}
+
+.cell--pulse .cell__peg {
+  animation: peg-pulse 420ms ease-out;
+}
+
+.cell--drop.cell--pulse .cell__peg {
+  animation: peg-drop var(--drop-duration) var(--drop-ease) both,
+    peg-pulse 420ms ease-out var(--drop-duration);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell--drop .cell__peg,
+  .cell--pulse .cell__peg,
+  .cell--drop[data-state='hit'] .cell__well,
+  .cell--drop[data-state='sunk'] .cell__well,
+  .cell--drop.cell--pulse .cell__peg,
+  .hull--sunk,
+  .hull--ghost {
+    animation: none;
+  }
+
+  .cell__ripple {
+    display: none;
+  }
+}
+
+/* Small sprites in the dock rows and the fleet chips -------------------- */
+
+.chip-sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill; /* same reading of "length" as on the board */
+}

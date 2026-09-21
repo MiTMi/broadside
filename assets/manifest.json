@@ -1,0 +1,672 @@
+{
+  "version": 1,
+  "updated_at": "2026-09-21T13:11:45.129Z",
+  "assets": {
+    "ship-patrol": {
+      "name": "ship-patrol",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Cute cartoon game sprite of a toy warship, playful children's board game style. Strict top-down orthographic view, looking straight down from directly above. A single ship, horizontal, bow pointing to the right, stern to the left, the hull spanning almost the full width of the frame and perfectly centered. Chunky rounded proportions, thick dark navy outline around the entire silhouette, flat cel-shaded colours: light battleship-grey hull, slightly darker grey deck, small bright red and yellow accents, one soft white highlight. Very simple, few details, crisp clean silhouette, symmetrical about its long axis. Isolated on a pure white background. No water, no waves, no wake, no drop shadow, no perspective, no text, no numbers, no letters, no border. It is a small patrol boat: short wide hull with pointed bow, open rear deck, small cabin toward the front.",
+        "aspect_ratio": "2:1",
+        "resolution": "1k",
+        "background_color": {
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "7365b1a8-dc3a-45e7-9bce-52d8dd2bc273",
+      "created_at": "2026-09-21T13:07:55.859Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/ship-patrol.jpg",
+      "optimized": "src/assets/ships/patrol.webp",
+      "bytes": 146196
+    },
+    "title": {
+      "name": "title",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Bright playful cartoon illustration in the style of a modern children's board game box cover. Bold clean outlines, chunky rounded shapes, flat cel-shaded colours, cheerful and friendly. Palette: deep navy and bright blue sea, light sky blue, battleship greys, accents of sunny yellow and warm red, white clouds. Simple bold composition. No text, no letters, no numbers, no logos, no border, no frame. A chunky friendly grey cartoon battleship seen from a low three-quarter angle, bouncing through big rounded navy waves toward the viewer's right, firing a broadside: a row of cannons with star-shaped yellow-and-red cartoon muzzle flashes and round puffy white smoke clouds. Two small cute escort ships on the horizon. Large calm area of light blue sky with a few puffy clouds in the upper third of the image.",
+        "aspect_ratio": "16:9",
+        "resolution": "1k",
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "91fddb4a-57b4-4d98-b516-a3a2f3195183",
+      "created_at": "2026-09-21T13:08:27.397Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/title.jpg",
+      "optimized": "src/assets/title.webp",
+      "bytes": 323499
+    },
+    "victory": {
+      "name": "victory",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Bright playful cartoon illustration in the style of a modern children's board game box cover. Bold clean outlines, chunky rounded shapes, flat cel-shaded colours, cheerful and friendly. Palette: deep navy and bright blue sea, light sky blue, battleship greys, accents of sunny yellow and warm red, white clouds. Simple bold composition. No text, no letters, no numbers, no logos, no border, no frame. Victory celebration at sea: a proud chunky grey cartoon battleship in calm sparkling blue water, seen from the side, colourful yellow and red bunting flags strung from bow to mast to stern, tiny simple cheering sailor figures on deck throwing their caps in the air, confetti, a big sunny yellow sun with flat rays behind, happy seagulls. Triumphant, joyful mood.",
+        "aspect_ratio": "4:3",
+        "resolution": "1k",
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "4824a92d-1669-4e1e-896f-0c83ec09f71c",
+      "created_at": "2026-09-21T13:08:40.638Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/victory.jpg",
+      "optimized": "src/assets/victory.webp",
+      "bytes": 370055
+    },
+    "defeat": {
+      "name": "defeat",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Bright playful cartoon illustration in the style of a modern children's board game box cover. Bold clean outlines, chunky rounded shapes, flat cel-shaded colours, cheerful and friendly. Palette: deep navy and bright blue sea, light sky blue, battleship greys, accents of sunny yellow and warm red, white clouds. Simple bold composition. No text, no letters, no numbers, no logos, no border, no frame. Gentle comedic defeat at sea: a chunky grey cartoon battleship tilted and half sunk in navy water with its bow pointing up, big round bubbles and a few puffs of grey smoke, tiny simple sailor figures sitting safely in a small yellow life raft nearby looking glum, one waving a little white flag, overcast blue-grey sky with a single rain cloud. Light-hearted, not scary, nobody hurt.",
+        "aspect_ratio": "4:3",
+        "resolution": "1k",
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "87ea93ed-414b-42cc-bf00-196dc073313a",
+      "created_at": "2026-09-21T13:08:50.668Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/defeat.jpg",
+      "optimized": "src/assets/defeat.webp",
+      "bytes": 286089
+    },
+    "table": {
+      "name": "table",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Top-down cartoon illustration of a light wooden tabletop, playful children's game style: wide pale honey-coloured planks running horizontally with simple stylised wood grain lines and a few knots, flat cel-shaded colours, soft and low contrast, very even lighting, completely empty surface, no objects, no vignette, no shadows, no text, uniform texture filling the whole frame.",
+        "aspect_ratio": "16:9",
+        "resolution": "1k",
+        "colors": [
+          {
+            "rgb": [
+              222,
+              196,
+              156
+            ]
+          },
+          {
+            "rgb": [
+              201,
+              170,
+              126
+            ]
+          },
+          {
+            "rgb": [
+              240,
+              224,
+              196
+            ]
+          }
+        ]
+      },
+      "request_id": "3cdde049-fe58-4888-8782-ed8a5e984415",
+      "created_at": "2026-09-21T13:09:03.904Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/table.jpg",
+      "optimized": "src/assets/table.webp",
+      "bytes": 172719
+    },
+    "ship-destroyer": {
+      "name": "ship-destroyer",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Top-down plan view game sprite of a toy warship, seen from directly overhead like a satellite photo or a map icon, camera pointing straight down at the deck. Only the deck is visible from above; the sides of the hull are not visible at all; no horizon, no three-quarter view, no side view, no perspective. The outline is a simple symmetrical elongated boat shape lying perfectly horizontal: pointed bow on the right, flat stern on the left, mirror-symmetrical about its horizontal centre line, spanning almost the full width of the frame and centered. Cute playful children's board game cartoon style: chunky rounded shapes, thick dark navy outline around the entire silhouette, flat cel-shaded colours, light battleship-grey deck with a slightly darker grey border, small bright red and yellow accents, one soft white highlight. Very simple, few details, crisp clean silhouette. Isolated on a pure white background. No water, no waves, no wake, no drop shadow, no text, no numbers, no letters, no border. From above it is a short stubby destroyer: a compact deck, sharp bow, one round gun turret forward, one round funnel.",
+        "aspect_ratio": "2:1",
+        "resolution": "1k",
+        "background_color": {
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "3dc69c61-240a-4f7b-abc9-f2049c239693",
+      "created_at": "2026-09-21T13:09:55.083Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/ship-destroyer.jpg",
+      "optimized": "src/assets/ships/destroyer.webp",
+      "bytes": 75781
+    },
+    "ship-carrier": {
+      "name": "ship-carrier",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Top-down plan view game sprite of a toy warship, seen from directly overhead like a satellite photo or a map icon, camera pointing straight down at the deck. Only the deck is visible from above; the sides of the hull are not visible at all; no horizon, no three-quarter view, no side view, no perspective. The outline is a simple symmetrical elongated boat shape lying perfectly horizontal: pointed bow on the right, flat stern on the left, mirror-symmetrical about its horizontal centre line, spanning almost the full width of the frame and centered. Cute playful children's board game cartoon style: chunky rounded shapes, thick dark navy outline around the entire silhouette, flat cel-shaded colours, light battleship-grey deck with a slightly darker grey border, small bright red and yellow accents, one soft white highlight. Very simple, few details, crisp clean silhouette. Isolated on a pure white background. No water, no waves, no wake, no drop shadow, no text, no numbers, no letters, no border. From above it is an aircraft carrier: a long flat rectangular flight deck with a pale painted runway centre line and a small square island tower on one edge.",
+        "aspect_ratio": "2:1",
+        "resolution": "1k",
+        "background_color": {
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "76b6ef80-ed4b-4750-9e88-26206ff8bfea",
+      "created_at": "2026-09-21T13:10:26.603Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/ship-carrier.jpg",
+      "optimized": "src/assets/ships/carrier.webp",
+      "bytes": 112340
+    },
+    "ship-battleship": {
+      "name": "ship-battleship",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Top-down plan view game sprite of a toy warship, seen from directly overhead like a satellite photo or a map icon, camera pointing straight down at the deck. Only the deck is visible from above; the sides of the hull are not visible at all; no horizon, no three-quarter view, no side view, no perspective. The outline is a simple symmetrical elongated boat shape lying perfectly horizontal: pointed bow on the right, flat stern on the left, mirror-symmetrical about its horizontal centre line, spanning almost the full width of the frame and centered. Cute playful children's board game cartoon style: chunky rounded shapes, thick dark navy outline around the entire silhouette, flat cel-shaded colours, light battleship-grey deck with a slightly darker grey border, small bright red and yellow accents, one soft white highlight. Very simple, few details, crisp clean silhouette. Isolated on a pure white background. No water, no waves, no wake, no drop shadow, no text, no numbers, no letters, no border. From above it is a battleship: broad deck tapering to a pointed bow, round gun turrets seen as circles with short barrels pointing toward the bow, two forward and one aft, a blocky superstructure in the middle.",
+        "aspect_ratio": "2:1",
+        "resolution": "1k",
+        "background_color": {
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "fe0816ca-e38d-40b0-94ad-3eb385c95939",
+      "created_at": "2026-09-21T13:10:46.005Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/ship-battleship.jpg",
+      "optimized": "src/assets/ships/battleship.webp",
+      "bytes": 124287
+    },
+    "ship-cruiser": {
+      "name": "ship-cruiser",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Top-down plan view game sprite of a toy warship, seen from directly overhead like a satellite photo or a map icon, camera pointing straight down at the deck. Only the deck is visible from above; the sides of the hull are not visible at all; no horizon, no three-quarter view, no side view, no perspective. The outline is a simple symmetrical elongated boat shape lying perfectly horizontal: pointed bow on the right, flat stern on the left, mirror-symmetrical about its horizontal centre line, spanning almost the full width of the frame and centered. Cute playful children's board game cartoon style: chunky rounded shapes, thick dark navy outline around the entire silhouette, flat cel-shaded colours, light battleship-grey deck with a slightly darker grey border, small bright red and yellow accents, one soft white highlight. Very simple, few details, crisp clean silhouette. Isolated on a pure white background. No water, no waves, no wake, no drop shadow, no text, no numbers, no letters, no border. From above it is a cruiser: a slim deck with a pointed bow, one round twin-gun turret forward and one aft, a single round funnel in the middle.",
+        "aspect_ratio": "2:1",
+        "resolution": "1k",
+        "background_color": {
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "db7eedff-86f1-45d4-8d22-eb35239b5de7",
+      "created_at": "2026-09-21T13:11:02.278Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/ship-cruiser.jpg",
+      "optimized": "src/assets/ships/cruiser.webp",
+      "bytes": 106854
+    },
+    "ship-submarine": {
+      "name": "ship-submarine",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Top-down plan view game sprite of a toy warship, seen from directly overhead like a satellite photo or a map icon, camera pointing straight down at the deck. Only the deck is visible from above; the sides of the hull are not visible at all; no horizon, no three-quarter view, no side view, no perspective. The outline is a simple symmetrical elongated boat shape lying perfectly horizontal: pointed bow on the right, flat stern on the left, mirror-symmetrical about its horizontal centre line, spanning almost the full width of the frame and centered. Cute playful children's board game cartoon style: chunky rounded shapes, thick dark navy outline around the entire silhouette, flat cel-shaded colours, light battleship-grey deck with a slightly darker grey border, small bright red and yellow accents, one soft white highlight. Very simple, few details, crisp clean silhouette. Isolated on a pure white background. No water, no waves, no wake, no drop shadow, no text, no numbers, no letters, no border. From above it is a submarine: a smooth cigar-shaped dark grey hull with a rounded bow, a small oval conning tower in the middle, small tail fins at the stern, no guns.",
+        "aspect_ratio": "2:1",
+        "resolution": "1k",
+        "background_color": {
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "fa38b61d-7009-4ba1-8034-b2d7198ef7da",
+      "created_at": "2026-09-21T13:11:18.647Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/ship-submarine.jpg",
+      "optimized": "src/assets/ships/submarine.webp",
+      "bytes": 102902
+    },
+    "ship-frigate": {
+      "name": "ship-frigate",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Top-down plan view game sprite of a toy warship, seen from directly overhead like a satellite photo or a map icon, camera pointing straight down at the deck. Only the deck is visible from above; the sides of the hull are not visible at all; no horizon, no three-quarter view, no side view, no perspective. The outline is a simple symmetrical elongated boat shape lying perfectly horizontal: pointed bow on the right, flat stern on the left, mirror-symmetrical about its horizontal centre line, spanning almost the full width of the frame and centered. Cute playful children's board game cartoon style: chunky rounded shapes, thick dark navy outline around the entire silhouette, flat cel-shaded colours, light battleship-grey deck with a slightly darker grey border, small bright red and yellow accents, one soft white highlight. Very simple, few details, crisp clean silhouette. Isolated on a pure white background. No water, no waves, no wake, no drop shadow, no text, no numbers, no letters, no border. From above it is a frigate: a slim deck with a sharp bow, one small round gun forward, a boxy bridge, and a helicopter landing pad at the stern marked with a plain painted circle ring, no letters.",
+        "aspect_ratio": "2:1",
+        "resolution": "1k",
+        "background_color": {
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "23059274-7316-49ba-a010-26c3e0f31029",
+      "created_at": "2026-09-21T13:11:31.851Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/ship-frigate.jpg",
+      "optimized": "src/assets/ships/frigate.webp",
+      "bytes": 158985
+    },
+    "ship-corvette": {
+      "name": "ship-corvette",
+      "model": "recraft/v4.1/text-to-image",
+      "body": {
+        "prompt": "Top-down plan view game sprite of a toy warship, seen from directly overhead like a satellite photo or a map icon, camera pointing straight down at the deck. Only the deck is visible from above; the sides of the hull are not visible at all; no horizon, no three-quarter view, no side view, no perspective. The outline is a simple symmetrical elongated boat shape lying perfectly horizontal: pointed bow on the right, flat stern on the left, mirror-symmetrical about its horizontal centre line, spanning almost the full width of the frame and centered. Cute playful children's board game cartoon style: chunky rounded shapes, thick dark navy outline around the entire silhouette, flat cel-shaded colours, light battleship-grey deck with a slightly darker grey border, small bright red and yellow accents, one soft white highlight. Very simple, few details, crisp clean silhouette. Isolated on a pure white background. No water, no waves, no wake, no drop shadow, no text, no numbers, no letters, no border. From above it is a short stubby corvette: a compact deck with a rounded stern, a small bridge in the middle, a tiny round gun at the bow.",
+        "aspect_ratio": "2:1",
+        "resolution": "1k",
+        "background_color": {
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        "colors": [
+          {
+            "rgb": [
+              23,
+              74,
+              124
+            ]
+          },
+          {
+            "rgb": [
+              140,
+              151,
+              163
+            ]
+          },
+          {
+            "rgb": [
+              224,
+              54,
+              44
+            ]
+          },
+          {
+            "rgb": [
+              245,
+              184,
+              46
+            ]
+          },
+          {
+            "rgb": [
+              246,
+              244,
+              238
+            ]
+          }
+        ]
+      },
+      "request_id": "8ae537f1-e408-41e5-88bc-1ae9636339f7",
+      "created_at": "2026-09-21T13:11:45.064Z",
+      "usd_estimate": 0.035,
+      "original": "assets/original/ship-corvette.jpg",
+      "optimized": "src/assets/ships/corvette.webp",
+      "bytes": 112206
+    }
+  }
+}

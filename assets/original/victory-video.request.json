@@ -1,0 +1,12 @@
+{
+  "request_id": "a72d9209-c42e-44c5-82fe-297fc2882f8f",
+  "model": "bytedance/seedance-2.5/text-to-video",
+  "body": {
+    "prompt": "Cinematic, photorealistic naval battle at sea, overcast dramatic sky, shot on a long lens from a nearby ship. A large grey enemy warship steams across choppy dark-blue water. A heavy artillery shell streaks in and strikes the ship amidships: a bright flash, then a massive realistic explosion with a fireball, thick black smoke and debris, and water columns erupting alongside. The ship's hull breaks, it lists heavily and begins to sink by the stern, burning, as smoke rolls across the waves. Slow push-in camera, realistic physics, film grain, natural colours, highly detailed. No text, no logos, no people visible.",
+    "duration": 10,
+    "resolution": "480p",
+    "aspect_ratio": "16:9",
+    "generate_audio": true
+  },
+  "submitted_at": "2026-09-21T15:56:57.843Z"
+}

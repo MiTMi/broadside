@@ -1,0 +1,35 @@
+{
+  "name": "broadside",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "assets:probe": "node --env-file=.env scripts/generate-assets.mjs --probe",
+    "assets:estimate": "node --env-file=.env scripts/generate-assets.mjs --estimate",
+    "assets:generate": "node --env-file=.env scripts/generate-assets.mjs --generate",
+    "assets:redo": "node --env-file=.env scripts/generate-assets.mjs --redo",
+    "assets:process": "node scripts/generate-assets.mjs --process",
+    "assets:placeholders": "node scripts/generate-assets.mjs --placeholders"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@fontsource/b612-mono": "^5.3.0",
+    "@fontsource/barlow-semi-condensed": "^5.3.0",
+    "@fontsource/big-shoulders-stencil-display": "^5.3.0",
+    "@playwright/test": "^1.63.0",
+    "eslint": "^10.11.0",
+    "sharp": "^0.35.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.0",
+    "vite": "^8.3.0",
+    "vite-plugin-singlefile": "^2.3.3",
+    "vitest": "^5.0.1"
+  }
+}

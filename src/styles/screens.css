@@ -1,0 +1,583 @@
+/* Shell, placement screen, battle screen, dialogs. */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  min-height: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--s-4);
+}
+
+/* Top bar --------------------------------------------------------------- */
+
+/* The bar sits directly on the table art, so it carries its own surface —
+   every colour in it then keeps the contrast it had on plain --mist (P10). */
+.topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+}
+
+.topbar__wordmark {
+  font-size: clamp(22px, 4vw, 28px);
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.status {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-14);
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  flex: none;
+}
+
+.status[data-turn='none'] .status__dot {
+  display: none;
+}
+
+.status[data-turn='player'] .status__dot {
+  background: var(--signal);
+}
+
+.status[data-turn='opponent'] .status__dot {
+  background: var(--peg-red);
+}
+
+@media (max-width: 719px) {
+  .app {
+    padding: var(--s-3) var(--s-4) var(--s-4);
+    gap: var(--s-3);
+  }
+
+  .topbar {
+    grid-template-columns: 1fr auto;
+    row-gap: 0;
+  }
+
+  .status {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: start;
+  }
+}
+
+/* Icons ----------------------------------------------------------------- */
+
+.icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.icon__solid {
+  fill: currentColor;
+}
+
+.icon__line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.icon__mute {
+  display: none;
+}
+
+.icon.is-muted .icon__wave {
+  display: none;
+}
+
+.icon.is-muted .icon__mute {
+  display: block;
+}
+
+/* Title ----------------------------------------------------------------- */
+
+.app[data-view='title'] {
+  min-height: 100dvh;
+}
+
+.app[data-view='title'] .app__main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.screen--title {
+  display: flex;
+  width: 100%;
+}
+
+/* `margin: auto` centres the card but lets the page scroll rather than clip
+   it on a very short window; the hero is capped so "Play" stays above the
+   fold at 360 x 640 and at 1280 x 720 (PLAN P11). */
+.title {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-4);
+  width: 100%;
+  max-width: 560px;
+  margin: auto;
+  padding: var(--s-4);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+}
+
+.title__hero {
+  width: 100%;
+  margin: 0;
+  aspect-ratio: 16 / 9;
+  max-height: min(46dvh, 400px);
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+
+.title__art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.title__wordmark {
+  font-size: clamp(44px, 10vw, 72px);
+}
+
+.title__tagline {
+  color: var(--ink-soft);
+  font-size: var(--t-16);
+}
+
+.title__play {
+  min-width: 180px;
+  min-height: 48px;
+  font-size: var(--t-20);
+}
+
+/* Placement ------------------------------------------------------------- */
+
+.screen--placement {
+  display: grid;
+  gap: var(--s-4);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .screen--placement {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    /* Page padding (16 + 16) + top bar (53) + the grid gap (16). */
+    --placement-chrome: 101px;
+  }
+
+  /* The tray is as tall as it is wide, so on a short laptop window it alone
+     pushes "Start battle" below the fold: cap it by height as well as width.
+     The floor keeps peg wells at ~27px — never smaller than a finger. */
+  .screen__board > .board {
+    --board-max: clamp(360px, calc(100dvh - var(--placement-chrome)), 600px);
+  }
+}
+
+@media (max-width: 899px) {
+  /* Stacked: keep the dock the same width as the tray above it. */
+  .dock {
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+}
+
+.dock {
+  --dock-cell: 18px;
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+}
+
+.dock__hint {
+  font-size: var(--t-14);
+  color: var(--ink-soft);
+}
+
+.dock__list {
+  display: grid;
+  gap: 2px;
+}
+
+.ship {
+  display: grid;
+  grid-template-columns: calc(5 * var(--dock-cell)) 1fr auto;
+  align-items: center;
+  gap: var(--s-2);
+  width: 100%;
+  padding: 5px var(--s-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ship:hover {
+  background: var(--surface-sunken);
+}
+
+.ship[aria-pressed='true'] {
+  border-color: var(--signal);
+  background: var(--surface-sunken);
+}
+
+.ship__silhouette {
+  display: block;
+  height: 15px;
+  width: calc(var(--len) * var(--dock-cell) - 2px);
+}
+
+/* Already on the board: greyed back so the unplaced ships read first. */
+.ship[data-placed='true'] .ship__silhouette {
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+
+.ship[data-placed='true'] .ship__name {
+  color: var(--ink-faint);
+}
+
+.ship__name {
+  font-size: var(--t-14);
+  font-weight: 600;
+}
+
+.ship__length {
+  color: var(--ink-faint);
+}
+
+.dock__remaining {
+  color: var(--ink-faint);
+  margin-top: calc(-1 * var(--s-2));
+}
+
+.dock__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-2);
+}
+
+.dock__actions .btn:first-child {
+  grid-column: 1 / -1;
+}
+
+.dock__difficulty {
+  display: grid;
+  gap: var(--s-1);
+}
+
+.dock__start {
+  width: 100%;
+  min-height: 48px;
+}
+
+/* Short windows (e.g. 972 x 563): tighten the dock so the tray and the primary
+   actions fit together instead of hiding below the fold. Declared after the
+   base dock rules so it wins on source order, not on specificity. */
+@media (min-width: 900px) and (max-height: 780px) {
+  .dock {
+    gap: var(--s-2);
+    padding: var(--s-3);
+  }
+
+  .ship {
+    padding: 2px var(--s-2);
+  }
+
+  .dock__actions {
+    /* `auto` tracks, so "Place randomly" keeps its label on one line. */
+    grid-template-columns: repeat(3, auto);
+  }
+
+  /* All three on one row — the base rule gives Rotate a row of its own. */
+  .dock__actions .btn,
+  .dock__actions .btn:first-child {
+    grid-column: auto;
+    min-height: 36px;
+    padding: 0 var(--s-2);
+    font-size: var(--t-14);
+    white-space: nowrap;
+  }
+}
+
+/* Battle ---------------------------------------------------------------- */
+
+.screen--battle {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-areas: 'enemy' 'own' 'log';
+}
+
+.screen__enemy {
+  grid-area: enemy;
+  --col-max: 600px;
+}
+
+.screen__own {
+  grid-area: own;
+  --col-max: 320px;
+}
+
+.log {
+  grid-area: log;
+}
+
+.screen__enemy,
+.screen__own {
+  display: grid;
+  gap: var(--s-2);
+}
+
+.screen__enemy > *,
+.screen__own > * {
+  width: 100%;
+  max-width: var(--col-max);
+  margin-inline: auto;
+}
+
+/* Heading and fleet legend sit straight on the table art: each gets a plate
+   so its text keeps 4.5:1 whatever the illustration does underneath (P10).
+   The trays need none — navy plastic is a surface already. */
+.screen__enemy > .heading,
+.screen__own > .heading {
+  padding: 2px var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 719px) {
+  /* On a phone the player's own tray is clearly the secondary board — and the
+     heading and fleet chips shrink with it so all three stay aligned. */
+  .screen__own {
+    --col-max: 72%;
+  }
+}
+
+@media (min-width: 960px) {
+  .screen--battle {
+    grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+    /* The enemy column is the tallest: give its spare height to the second row
+       so the log stays tucked under the player's own tray. */
+    grid-template-rows: max-content 1fr;
+    grid-template-areas:
+      'own enemy'
+      'log enemy';
+    align-items: start;
+  }
+}
+
+/* Fleet status ---------------------------------------------------------- */
+
+.fleet {
+  display: grid;
+  gap: var(--s-1);
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sm);
+}
+
+.fleet__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--s-3);
+}
+
+.fleet__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--t-12);
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.fleet__silhouette {
+  display: block;
+  height: 10px;
+  width: calc(var(--len) * 8px);
+  flex: none;
+}
+
+.fleet__item[data-sunk='true'] {
+  color: var(--ink-faint);
+}
+
+.fleet__item[data-sunk='true'] .fleet__silhouette {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+.fleet__item[data-sunk='true']::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: calc(50% - 1px);
+  height: 2px;
+  border-radius: 1px;
+  background: var(--peg-red);
+}
+
+/* Log ------------------------------------------------------------------- */
+
+.log__list {
+  display: grid;
+  gap: 2px;
+  margin-top: var(--s-1);
+}
+
+.log__line {
+  color: var(--ink-faint);
+}
+
+.log__line[data-age='0'] {
+  color: var(--ink);
+  font-size: var(--t-14);
+}
+
+.log__line[data-age='1'] {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 719px) {
+  .log__line[data-age='3'] {
+    display: none;
+  }
+}
+
+/* Dialogs --------------------------------------------------------------- */
+
+.modal {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-width: min(92vw, 420px);
+  color: var(--ink);
+}
+
+.modal::backdrop {
+  background: var(--scrim);
+}
+
+.modal__card {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+}
+
+.modal--result .modal__card {
+  justify-items: center;
+  text-align: center;
+  /* The art shrinks before the card does, so the whole card stays on screen
+     on a phone without the dialog having to scroll (PLAN P12). */
+  max-height: 92dvh;
+  overflow-y: auto;
+}
+
+.modal--result[data-stage='video'] {
+  max-width: min(94vw, 860px);
+}
+
+.modal__stage {
+  display: grid;
+  gap: var(--s-3);
+  justify-items: end;
+  width: 100%;
+}
+
+.modal__stage[hidden],
+.modal__body[hidden] {
+  display: none;
+}
+
+.modal__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 78dvh;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+}
+
+.modal__body {
+  display: grid;
+  gap: var(--s-3);
+  justify-items: center;
+  width: 100%;
+}
+
+.modal__art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: min(38dvh, 260px);
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+
+.modal__word {
+  font-size: clamp(44px, 14vw, 72px);
+  line-height: 0.95;
+}
+
+.modal__word[data-outcome='defeat'] {
+  color: var(--peg-red);
+}
+
+.modal__detail {
+  color: var(--ink-soft);
+  font-size: var(--t-16);
+}
+
+.modal--result .btn {
+  min-width: 160px;
+  min-height: 48px;
+}
+
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  justify-content: flex-end;
+}

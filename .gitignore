@@ -1,0 +1,10 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+.DS_Store
+.claude/settings.local.json
+
+# Credentials: never commit them. The example file (names only) is the exception.
+.env*
+!.env.example
