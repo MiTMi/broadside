@@ -4,6 +4,7 @@
  * mid-sentence and are capitalised with `titleCase` when used as a label.
  */
 import type { Difficulty, ShotOutcome, Side, ViewCell } from '../engine/index';
+import type { MatchEnd, MatchSide } from '../match/index';
 
 export const GAME_TITLE = 'Broadside';
 
@@ -11,7 +12,8 @@ export const COPY = {
   tagline: 'Sink the enemy fleet before it sinks yours.',
 
   title: {
-    play: 'Play',
+    solo: 'Play vs computer',
+    online: 'Play online',
   },
 
   placement: {
@@ -49,11 +51,83 @@ export const COPY = {
     hard: 'Hard',
   } satisfies Record<Difficulty, string>,
 
+  /** Everything the two-player mode says (Phase 3). */
+  online: {
+    /** How the log and the battle copy name the other player. */
+    opponentLabel: 'your opponent',
+    lobbyHeading: 'Play online',
+    lobbyIntro: 'One of you creates the game and shares the code. The other joins with it.',
+    create: 'Create game',
+    joinHeading: 'Join a game',
+    codeLabel: 'Room code',
+    join: 'Join game',
+    /** The shape of a code, in one place: the hint and the example agree. */
+    codeExample: 'ABC234',
+    invalidCode: 'A room code is 6 letters and numbers, like ABC234.',
+    codeHeading: 'Your room code',
+    codeHint: 'Send the link, or read the code out to your friend.',
+    linkLabel: 'Link to this game',
+    copyLink: 'Copy link',
+    linkCopied: 'Link copied',
+    copyFallback: 'The link is selected — press ⌘C (Ctrl+C) to copy it.',
+    share: 'Share',
+    shareText: 'Play me at Broadside.',
+    back: 'Back',
+    backToTitle: 'Back to title',
+    waitingForFriend: 'Waiting for your friend to join…',
+    joining: (code: string): string => `Joining ${code}…`,
+    waitingPlacement: 'Waiting for your opponent to finish placing…',
+    opponentTurn: "Opponent's turn…",
+    rematchWaiting: 'Waiting for your opponent…',
+    theyWantRematch: 'Your opponent wants a rematch.',
+    verified: 'Fleet verified',
+    mismatch: "Opponent's fleet did not match",
+    leave: 'Leave game',
+    /** Why an online session stopped, when it was not a finished game (D10). */
+    ended: {
+      'peer-left': {
+        title: 'Your opponent left the game',
+        detail: 'There is no one left to play against.',
+      },
+      lost: {
+        title: 'Connection lost',
+        detail: 'The link to your opponent dropped. Start a new game to play again.',
+      },
+      closed: {
+        title: 'Connection lost',
+        detail: 'The link to your opponent dropped. Start a new game to play again.',
+      },
+      error: {
+        title: 'Connection problem',
+        detail: 'Something went wrong on the connection. Start a new game to play again.',
+      },
+      unreachable: {
+        title: "Couldn't reach the connection service",
+        detail: 'Check your internet connection.',
+      },
+      timeout: {
+        title: "Couldn't reach that game",
+        detail: 'Check the code, or ask your friend to create a new one.',
+      },
+      full: {
+        title: 'That game is already full',
+        detail: 'Two players are in that room already.',
+      },
+      version: {
+        title: 'Different versions of the game',
+        detail: 'You and your opponent are running different versions. Reload the page and try again.',
+      },
+    } satisfies Record<MatchEnd, { title: string; detail: string }>,
+  },
+
   confirm: {
     title: 'Start a new game?',
     body: 'This battle will be abandoned and both fleets reset.',
     ok: 'New game',
     cancel: 'Keep playing',
+    leaveTitle: 'Leave this game?',
+    leaveBody: 'Your opponent will be told that you left, and the game ends for both of you.',
+    leaveOk: 'Leave game',
   },
 
   over: {
@@ -65,6 +139,12 @@ export const COPY = {
       shipsLeft === 1
         ? 'Your fleet was sunk. The enemy had 1 ship left.'
         : `Your fleet was sunk. The enemy had ${shipsLeft} ships left.`,
+    victoryDetailOnline: (shots: number, accuracy: number): string =>
+      `Your opponent's fleet sunk in ${shots} shots · ${accuracy}% accuracy`,
+    defeatDetailOnline: (shipsLeft: number): string =>
+      shipsLeft === 1
+        ? 'Your fleet was sunk. Your opponent had 1 ship left.'
+        : `Your fleet was sunk. Your opponent had ${shipsLeft} ships left.`,
     playAgain: 'Play again',
     skipVideo: 'Skip',
   },
@@ -113,4 +193,23 @@ export function sunkMessage(by: Side, shipName: string): string {
   return by === 'player'
     ? `You sank the enemy ${shipName}.`
     : `The enemy sank your ${shipName}.`;
+}
+
+/** "your opponent" → "Your opponent" — the label opens a sentence. */
+function opening(label: string): string {
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+/** Online: "D4 — hit." / "Your opponent fires at B7 — hit." */
+export function onlineShotMessage(by: MatchSide, label: string, outcome: ShotOutcome): string {
+  const result = outcome === 'miss' ? 'miss' : 'hit';
+  if (by === 'me') return `${label} — ${result}.`;
+  return `${opening(COPY.online.opponentLabel)} fires at ${label} — ${result}.`;
+}
+
+/** Online: "You sank their cruiser." / "Your opponent sank your destroyer." */
+export function onlineSunkMessage(by: MatchSide, shipName: string): string {
+  return by === 'me'
+    ? `You sank their ${shipName}.`
+    : `${opening(COPY.online.opponentLabel)} sank your ${shipName}.`;
 }

@@ -2,17 +2,13 @@
  * The sound seam. The UI only ever talks to this interface, so T3 can add a
  * real WebAudio implementation in `sound.ts` and swap it in from `main.ts`
  * without touching any view.
+ *
+ * The cue names live in `match/match.ts` — a match asks for them (`onSfx`) and
+ * this layer decides what they sound like.
  */
+import type { SfxEvent } from '../match/index';
 
-export type SfxEvent =
-  | 'select' // ship picked up in the dock
-  | 'place' // ship dropped on the board
-  | 'start' // battle begins
-  | 'miss'
-  | 'hit'
-  | 'sunk'
-  | 'win'
-  | 'lose';
+export type { SfxEvent };
 
 export interface Sfx {
   /** Plays a cue. Must never throw and must be safe before the first gesture. */

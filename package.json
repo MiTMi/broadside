@@ -31,5 +31,8 @@
     "vite": "^8.3.0",
     "vite-plugin-singlefile": "^2.3.3",
     "vitest": "^5.0.1"
+  },
+  "dependencies": {
+    "peerjs": "^1.5.5"
   }
 }

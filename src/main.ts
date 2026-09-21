@@ -4,6 +4,7 @@ import './styles/board.css';
 import './styles/screens.css';
 
 import { createApp } from './ui/app';
+import { roomFromHref } from './net/index';
 import { TABLE_BG } from './ui/assets';
 import { createSound } from './ui/sound';
 import { must } from './ui/dom';
@@ -22,4 +23,9 @@ createApp(must(document.querySelector<HTMLElement>('#app'), '#app'), {
   sfx: createSound(),
   seed,
   fast: params.get('fast') === '1',
+  // Two tabs of this browser (`?transport=local`, for tests and demos) or the
+  // real peer-to-peer connection (Decision N2).
+  transport: params.get('transport') === 'local' ? 'local' : 'peer',
+  // `?room=ABC234`: someone shared a game — open straight into joining it (N8).
+  room: roomFromHref(window.location.href),
 });

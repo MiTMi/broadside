@@ -3,7 +3,8 @@
  * secondary, fleet status silhouettes sit under each, and the log runs beneath.
  */
 import { coordLabel, shipAt, toOpponentView } from '../engine/index';
-import type { Coord, GameState, ShipId } from '../engine/index';
+import type { Coord, ShipId } from '../engine/index';
+import type { MatchView } from '../match/index';
 import { BoardView } from './boardView';
 import type { HullView } from './boardView';
 import { COPY, cellLabelFor } from './copy';
@@ -12,10 +13,8 @@ import { BattleLog } from './log';
 import { el } from './dom';
 
 export interface BattleProps {
-  game: GameState;
-  /** True while the CPU is thinking, or once the game is over. */
-  locked: boolean;
-  log: readonly string[];
+  /** Everything on screen comes from the match: solo and online look the same here. */
+  match: MatchView;
 }
 
 export interface BattleHandlers {
@@ -69,16 +68,19 @@ export class BattleScreen {
   }
 
   update(props: BattleProps): void {
-    const { game } = props;
-    const over = game.phase === 'over';
+    const { match } = props;
+    const over = match.phase === 'over';
     this.element.dataset['screen'] = over ? 'over' : 'battle';
-    const enemyView = toOpponentView(game.boards.opponent);
-    const ownView = toOpponentView(game.boards.player);
+    const enemyView = match.enemyView;
+    const ownBoard = match.ownBoard;
+    const ownView = toOpponentView(ownBoard);
 
     const enemyHulls: HullView[] = enemyView.sunk.map(toHull('sunk'));
-    if (over) {
+    // Only once the game is over — until then, the enemy fleet is not ours to know.
+    const revealed = over ? match.enemyFleetRevealed : null;
+    if (revealed) {
       const sunkIds = new Set(enemyView.sunk.map((ship) => ship.spec.id));
-      for (const ship of game.boards.opponent.ships) {
+      for (const ship of revealed) {
         if (!sunkIds.has(ship.spec.id)) enemyHulls.push(toHull('ghost')(ship));
       }
     }
@@ -86,16 +88,16 @@ export class BattleScreen {
     this.enemyBoard.update({
       cells: enemyView.cells,
       hulls: enemyHulls,
-      mode: over || props.locked || game.turn !== 'player' ? 'idle' : 'fire',
+      mode: over || match.locked || match.turn !== 'me' ? 'idle' : 'fire',
       cellLabel: (coord, state) => cellLabelFor(coordLabel(coord), state),
     });
 
     this.ownBoard.update({
       cells: ownView.cells,
-      hulls: game.boards.player.ships.map(toHull('own')),
+      hulls: ownBoard.ships.map(toHull('own')),
       mode: 'idle',
       cellLabel: (coord, state) => {
-        const ship = shipAt(game.boards.player, coord);
+        const ship = shipAt(ownBoard, coord);
         const label = coordLabel(coord);
         if (!ship) return cellLabelFor(label, state);
         const base = COPY.cell.ownShip(label, ship.spec.name);
@@ -105,7 +107,7 @@ export class BattleScreen {
 
     this.enemyFleet.update(sunkIds(enemyView.sunk.map((ship) => ship.spec.id)));
     this.ownFleet.update(sunkIds(ownView.sunk.map((ship) => ship.spec.id)));
-    this.logView.update(props.log);
+    this.logView.update(match.log);
   }
 }
 

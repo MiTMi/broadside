@@ -34,11 +34,11 @@ const FIREABLE = '[data-testid^="enemy-cell-"][data-fireable="true"]';
 const OVER_OR_FIREABLE = `[data-screen="over"], ${FIREABLE}`;
 const MAX_SHOTS = 200;
 
-/** The title screen is where every visit starts; "Play" opens placement. */
+/** The title screen is where every visit starts; "Play vs computer" opens placement. */
 async function startFromTitle(page: Page): Promise<void> {
   await page.goto('/?seed=7&fast=1');
   await expect(page.locator('[data-screen="title"]')).toBeVisible();
-  const play = page.getByTestId('btn-play');
+  const play = page.getByTestId('btn-mode-solo');
   await expect(play).toBeFocused();
   await play.click();
   await expect(page.locator('[data-screen="placement"]')).toBeVisible();

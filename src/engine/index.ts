@@ -19,5 +19,7 @@ export {
   allSunk,
 } from './board';
 export { toOpponentView } from './view';
+export { emptyRemoteView, applyShotResult } from './remoteView';
+export type { ShotRecord } from './remoteView';
 export { chooseShot } from './ai';
 export { newGame, startBattle, takeShot, other } from './game';

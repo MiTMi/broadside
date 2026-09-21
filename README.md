@@ -1,9 +1,14 @@
 # Broadside
 
-A naval battle game for one player against the computer, in the spirit of the classic pegboard
-board game: two moulded plastic trays, red and white pegs, and a fleet of illustrated cartoon
-ships on an illustrated tabletop. It runs entirely in the browser — no server, no network
-requests, no tracking, no dependencies at runtime.
+A naval battle game in the spirit of the classic pegboard board game: two moulded plastic trays,
+red and white pegs, and a fleet of illustrated cartoon ships on an illustrated tabletop. Play
+against the computer, or against a friend on another device over a room code.
+
+It runs entirely in the browser: there is no server of ours, no account, no tracking and no
+analytics. **Playing against the computer makes no network request at all** — an end-to-end test
+watches every request, websocket and `RTCPeerConnection` to keep that true. Playing online needs
+the internet, and exactly one runtime dependency, [PeerJS](https://peerjs.com) (MIT), which is
+bundled into the page like everything else — see [Play online](#play-online).
 
 `npm run build` emits a **single self-contained `dist/index.html`** (fonts and artwork inlined as
 `data:` URIs) that works when you double-click it.
@@ -19,7 +24,10 @@ npm run preview    # http://localhost:4173 — serves the built file
 
 **Playing the built file offline.** `dist/index.html` is one file with everything inside it. Double-click
 it (or drag it onto a browser) and it plays from `file://`; copy it to another machine, mail it,
-drop it in a folder — it has no siblings to lose.
+drop it in a folder — it has no siblings to lose. (Online play is the one thing a `file://` copy
+cannot do — PeerJS decides how to dial the broker from `location.protocol`, and there is no page
+origin to speak of. Serve it over http(s) — `npm run preview`, or the published site — to play a
+friend.)
 
 **An app window on macOS.** Open the game in Safari, then **File → Add to Dock…**. Safari installs it
 as its own dock icon that opens in a plain window with no address bar. This works both from
@@ -86,7 +94,8 @@ the output sizes can be re-tuned from the originals as often as you like.
 - **Ships may not touch — not edge to edge and not corner to corner.** Every square around a ship
   has to be open water. The placement preview turns red when a ship would touch, and the forbidden
   ring around the ships you have already placed is tinted while you hold one.
-- One shot per turn, strictly alternating. A hit does *not* earn a bonus shot. You fire first.
+- One shot per turn, strictly alternating. A hit does *not* earn a bonus shot. Against the computer
+  you fire first; online, whoever created the game does.
 - A sunk ship is announced by name and its hull is revealed on the grid, sprite and all.
 - **Clear water.** Because ships cannot touch, every unfired square around a ship that has just sunk
   is provably empty. Those squares are marked with a small dot, they stop accepting shots, and they
@@ -112,6 +121,55 @@ the game is perfectly playable silently if a browser has no audio at all.
 
 `prefers-reduced-motion: reduce` removes the peg-drop animation, the ripple and the pulses.
 
+## Play online
+
+Two people, two devices, one room code.
+
+1. Both open the game. One picks **Play online → Create game** and gets a six-character room code
+   (`ABCDEFGHJKLMNPQRSTUVWXYZ23456789` — no `0`/`O`, no `1`/`I`) plus a **Copy link** button, and on
+   iPadOS/iOS the system **Share** sheet.
+2. The other picks **Play online → Join game**, types the code (or just opens the shared link,
+   which carries `?room=CODE` and goes straight to joining).
+3. Both place their fleets at the same time; whoever created the game fires first. The loser of a
+   game fires first in the rematch, and a rematch needs both players to ask for it.
+
+**Where the moves go.** Nowhere except the other player's browser. The two devices exchange shots
+and results over a **WebRTC data channel** — a direct connection between the two browsers,
+encrypted end to end (SCTP over DTLS, as every data channel is). To find each other in the first place they use PeerJS's free public signalling
+broker at `0.peerjs.com`: it learns the room id (`broadside-<CODE>`) and the connection metadata
+two browsers need to meet — IP addresses and candidate ports — and nothing else. No fleet, no
+shot, no result and no name ever goes through it. Nothing is stored anywhere; close the tab and
+the room is gone.
+
+**Your fleet stays yours.** Each device runs the rules for its *own* board only: it answers an
+incoming shot with hit / miss / sunk, and learns about the other fleet only from the answers it
+gets back. A ship's position crosses the wire exactly once — when that ship sinks — so a modified
+client cannot ask where your carrier is; it was never sent. At the end both sides reveal their
+fleets, and each checks the reveal against a SHA-256 commitment made before the first shot *and*
+against every result it was given during the game; the result card says **Fleet verified** when
+that checks out. (It is a friendly game, not a tournament: the check catches a lying client after
+the fact, it does not prevent one.)
+
+**Known limits**, all of which show a plain message and a way back to the title rather than a
+spinner:
+
+- **Some networks cannot connect.** The default relays PeerJS ships with (a Google STUN server and
+  a shared public TURN) are free and unguaranteed; behind carrier-grade NAT, a strict corporate
+  firewall or a VPN, two browsers may simply never meet. Joining gives up after 20 seconds.
+- **The public broker has no SLA.** If it is down or blocked, creating and joining both fail with
+  "Couldn't reach the connection service".
+- **A backgrounded tab disconnects.** iPadOS and iOS suspend WebRTC when the tab is not in front or
+  the device is locked; the other player sees "Connection lost". Reconnecting is not supported —
+  create a new game.
+- **Not from `file://`**, as above. Use the published URL or `npm run preview`.
+- **Two players per room.** A third person joining is told the game is already full; the game in
+  progress does not notice.
+
+**Testing it without a network.** `?transport=local` swaps the WebRTC transport for one built on
+`BroadcastChannel`: two tabs of the *same* browser find each other by room code with no broker and
+no internet at all. That is what the two-page end-to-end test drives, and it is the fastest way to
+see both sides of the online flow while developing.
+
 ## Difficulties
 
 The computer only ever sees what a human opponent would see: your hits, misses, sunk hulls and the
@@ -134,26 +192,34 @@ clear water around them. It never looks at your ship positions.
 | `npm run preview` | serve `dist/` on port 4173 |
 | `npm run typecheck` | TypeScript only |
 | `npm run lint` | ESLint over the whole repo |
-| `npm test` | Vitest — engine and AI unit tests, including seeded simulations |
-| `npm run e2e` | Playwright: builds, serves, then plays a seeded game to the end |
+| `npm test` | Vitest — engine, AI, protocol, transport and match unit tests, including seeded simulations |
+| `npm run e2e` | Playwright: builds, serves, then plays seeded games to the end — solo, two-page online over `?transport=local`, and the no-network check |
 
-URL parameters, used by the e2e test and handy for debugging:
+No test of any kind touches the public broker or the internet: the PeerJS transport is unit-tested
+against a mocked `peerjs` module, and the online end-to-end test runs on `?transport=local`.
+
+URL parameters, used by the e2e tests and handy for debugging:
 
 - `?seed=7` — seed the run; the same seed always produces the same enemy fleet and the same
   computer play.
 - `?fast=1` — drop the computer's "thinking" pause to zero.
+- `?room=CODE` — open straight into joining that online game (this is what "Copy link" copies).
+- `?transport=local` — play online against another tab of the same browser, over
+  `BroadcastChannel` instead of WebRTC. No broker, no network.
 
 ## Architecture
 
 ```
 src/engine/   pure, immutable, DOM-free game rules (the only place rules live)
-src/ui/       views that render from state; no rules, no state of their own
+src/net/      protocol, room codes, commitments and the transports (DOM-free)
+src/match/    a match as a state machine: SoloMatch and OnlineMatch behind one interface
+src/ui/       views that render from a MatchView; no rules, no state of their own
 src/ui/assets.ts  the one module that imports image files
 src/styles/   tokens.css holds every colour; everything else derives from it
 src/assets/   the optimized artwork, bundled into the single file
 scripts/      the generate-once asset pipeline (never runs at play time)
 tests/        Vitest unit tests + seeded simulations
-e2e/          Playwright smoke test against the real build
+e2e/          Playwright specs against the real build: solo, online, network
 ```
 
 The game opens on a **title screen**. That is a UI state, not an engine phase: the engine still
@@ -174,7 +240,43 @@ opponent would have — and answers with a coordinate:
 chooseShot(view: OpponentView, difficulty: Difficulty, rng: Rng): Coord
 ```
 
-Adding a second human therefore means replacing that one controller with a transport (hot seat, or
-a socket that exchanges `takeShot` coordinates), not rewriting the game. Because the AI is typed
-against `OpponentView` rather than `Board`, it is impossible for it to cheat by construction — and
-the same type is what a remote player would receive.
+Adding a second human therefore meant replacing that one controller with a transport, not
+rewriting the game. Because the AI is typed against `OpponentView` rather than `Board`, it is
+impossible for it to cheat by construction — and that same type is what a remote player receives.
+
+**The online seam.** Two interfaces carry the whole of it:
+
+```ts
+// src/match/match.ts — what every screen renders from
+interface Match { readonly view: MatchView; start(board): void; fire(c: Coord): void;
+                  requestRematch(): void; leave(): void; /* …change and sound callbacks */ }
+
+// src/net/transport.ts — how the other device is reached
+interface Transport { send(msg: Msg): void; onMessage(cb): void; onOpen(cb): void;
+                      onClose(cb: (why: CloseReason) => void): void; close(): void; }
+createTransport(kind: 'peer' | 'local', role: 'host' | 'guest', code: string): Transport
+```
+
+`SoloMatch` wraps the `GameState` and the CPU controller; `OnlineMatch` wraps a `Transport`, its
+own board and a reconstructed view of the enemy's. The UI knows neither — it renders a `MatchView`
+and calls `fire()`. `src/net/**` and `src/match/**` are DOM-free and ESLint-enforced to stay that
+way; only `localTransport.ts`, `peerTransport.ts`, `roomCode.ts` and `commitment.ts` may reach for
+`BroadcastChannel`, PeerJS or `crypto`.
+
+Two transports implement that interface today — `peerTransport.ts` (WebRTC via PeerJS) and
+`localTransport.ts` (`BroadcastChannel`, two tabs, used by `?transport=local` and the tests) — and
+a third (a WebSocket relay, a Firebase document, anything that moves JSON both ways) would need no
+change above the seam. The transport's job stops at moving opaque JSON: it never validates or
+answers a message. `OnlineMatch` re-parses every single one, ignores anything that does not fit the
+phase, the turn and the shot number, and drops a peer that sends five bad messages.
+
+`peerTransport.ts` loads PeerJS through a dynamic `import()` — `createTransport` stays synchronous
+and hands back a transport that buffers sends until the module and the peer are there — so a solo
+player never executes a line of it. The header of that file has the table mapping every PeerJS
+failure onto the five close reasons the UI has copy for.
+
+**Dependencies.** `peerjs` (MIT) is the one entry under `dependencies`, and the only third-party
+code that ships. It brings its own small ones — an event emitter, two binary codecs and
+`webrtc-adapter` — which the bundler inlines along with it: about **114 kB** of the single file
+(31 kB gzipped), none of it fetched at runtime and none of it executed unless you play online.
+Everything else in `package.json` is a build or test tool.

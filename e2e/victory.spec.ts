@@ -8,7 +8,7 @@ import type { Page } from '@playwright/test';
 
 async function winSeededGame(page: Page): Promise<void> {
   await page.goto('/?seed=1&fast=1');
-  await page.getByTestId('btn-play').click();
+  await page.getByTestId('btn-mode-solo').click();
   await page.getByTestId('btn-difficulty-easy').click();
   await page.getByTestId('btn-random').click();
   await page.getByTestId('btn-start').click();

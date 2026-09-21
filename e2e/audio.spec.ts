@@ -128,7 +128,7 @@ test('every cue is loud enough to hear, and nothing clips', async ({ page }) => 
 
   // "Play" is the first gesture of the session: it both starts the audio
   // context and plays the quietest cue in the game.
-  const select = await sample(page, () => page.getByTestId('btn-play').click());
+  const select = await sample(page, () => page.getByTestId('btn-mode-solo').click());
   expect(await page.evaluate(() => window.__audio.state())).toBe('running');
 
   const place = await sample(page, () => page.getByTestId('btn-random').click());
@@ -177,7 +177,7 @@ test('muting silences the output and survives a reload', async ({ page }) => {
   await page.addInitScript(installAudioTap);
   await page.goto('/?seed=4');
 
-  await page.getByTestId('btn-play').click();
+  await page.getByTestId('btn-mode-solo').click();
   await page.getByTestId('btn-sound').click();
   await expect(page.getByTestId('btn-sound')).toHaveAttribute('aria-pressed', 'false');
   // Let the cue that played on the way in die away before measuring.
@@ -189,7 +189,7 @@ test('muting silences the output and survives a reload', async ({ page }) => {
   // The choice is persisted, and the header shows it on the next visit.
   await page.reload();
   await expect(page.getByTestId('btn-sound')).toHaveAttribute('aria-pressed', 'false');
-  await page.getByTestId('btn-play').click();
+  await page.getByTestId('btn-mode-solo').click();
   const stillMuted = await sample(page, () => page.getByTestId('btn-random').click());
   expect(stillMuted.peak, 'still muted after a reload').toBeLessThan(0.001);
 

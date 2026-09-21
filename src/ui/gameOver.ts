@@ -1,9 +1,19 @@
 /** The end-of-game card: the outcome art, one big stencil word, the numbers, and Play again. */
+import type { RematchState } from '../match/index';
 import { DEFEAT_ART, VICTORY_ART, VICTORY_VIDEO } from './assets';
 import { COPY } from './copy';
 import { el, setText } from './dom';
 
-export interface GameOverProps {
+/** The parts that keep changing while the card is up (online). */
+export interface GameOverStatus {
+  /** Online: "Play again" asks the opponent rather than starting a new game. */
+  online: boolean;
+  /** The quiet honesty note (N4), or null when there is nothing to say. */
+  note: string | null;
+  rematch: RematchState;
+}
+
+export interface GameOverProps extends GameOverStatus {
   won: boolean;
   detail: string;
   /** Play the victory clip before revealing the card (wins only). */
@@ -23,11 +33,14 @@ export class GameOverDialog {
   private readonly skip: HTMLButtonElement;
   private readonly body: HTMLElement;
   private readonly again: HTMLButtonElement;
+  private readonly leave: HTMLButtonElement;
   private reveal: (() => void) | null = null;
   private readonly word: HTMLElement;
   private readonly detail: HTMLElement;
+  private readonly note: HTMLElement;
+  private readonly rematch: HTMLElement;
 
-  constructor(onPlayAgain: () => void) {
+  constructor(onPlayAgain: () => void, onLeave: () => void) {
     this.element = el('dialog', 'modal modal--result');
     const card = el('div', 'modal__card');
 
@@ -47,9 +60,31 @@ export class GameOverDialog {
     again.dataset['testid'] = 'btn-play-again';
     again.addEventListener('click', onPlayAgain);
 
+    // Small and quiet: it is a footnote about the other fleet, not a verdict
+    // on the game (Decision N4).
+    this.note = el('p', 'modal__note');
+    this.note.dataset['testid'] = 'verify-note';
+    this.note.hidden = true;
+
+    this.rematch = el('p', 'modal__rematch');
+    this.rematch.dataset['testid'] = 'rematch-status';
+    this.rematch.setAttribute('role', 'status');
+    this.rematch.setAttribute('aria-live', 'polite');
+    this.rematch.hidden = true;
+
+    // Online, the card is modal while the rematch is being agreed: without
+    // this the player is stuck whenever the opponent simply never answers.
+    this.leave = el('button', 'btn btn--quiet modal__leave');
+    this.leave.type = 'button';
+    this.leave.textContent = COPY.online.leave;
+    this.leave.dataset['testid'] = 'btn-leave';
+    this.leave.hidden = true;
+    this.leave.addEventListener('click', onLeave);
+
     this.again = again;
     this.body = el('div', 'modal__body');
-    this.body.append(this.art, this.word, this.detail, again);
+    // The rematch line sits above the button: it is the reason to press it.
+    this.body.append(this.art, this.word, this.detail, this.note, this.rematch, again, this.leave);
 
     // The victory clip: plays first, then (or on Skip) the card takes over.
     this.video = el('video', 'modal__video');
@@ -82,6 +117,7 @@ export class GameOverDialog {
     setText(this.word, props.won ? COPY.over.victory : COPY.over.defeat);
     this.word.dataset['outcome'] = props.won ? 'victory' : 'defeat';
     setText(this.detail, props.detail);
+    this.setStatus(props);
 
     const showCard = (): void => {
       if (this.reveal === null) return;
@@ -115,6 +151,31 @@ export class GameOverDialog {
       this.video.muted = true;
       return this.video.play().catch(showCard);
     });
+  }
+
+  /**
+   * The verification verdict and the rematch handshake land after the card is
+   * already up, so they are updated in place.
+   */
+  setStatus(status: GameOverStatus): void {
+    setText(this.note, status.note ?? '');
+    this.note.hidden = status.note === null;
+
+    const asked = status.online && status.rematch !== 'none';
+    setText(
+      this.rematch,
+      status.rematch === 'i-asked'
+        ? COPY.online.rematchWaiting
+        : status.rematch === 'they-asked'
+          ? COPY.online.theyWantRematch
+          : '',
+    );
+    this.rematch.hidden = !asked;
+    // My own request is out; the answer is the opponent's to give.
+    this.again.disabled = status.online && status.rematch === 'i-asked';
+    // Solo has "New game" in the top bar; online the top bar is behind the
+    // modal, so the way out has to be on the card itself.
+    this.leave.hidden = !status.online;
   }
 
   close(): void {
